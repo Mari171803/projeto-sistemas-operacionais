@@ -1,6 +1,12 @@
 from fcfs import *
 from rr import *
+from fcfs import *
+from rr import *
 import rr
+from sjf import *
+
+import sys
+from pathlib import Path
 from sjf import *
 
 import sys
@@ -31,6 +37,19 @@ except ValueError as erro:
 
 if not linhas or len(linhas) % 2 != 0:
     raise ValueError("Valores incorretos. O programa exige 2 valores: o tempo de chegada e tempo de duração de cada processo. Insira-os corretamente.")
+
+
+
+def calcularMedias(processos): # função pra calcular as médias
+    quantidade = len(processos)
+
+    mediaRetorno = sum(p['turnaround'] for p in processos) / quantidade
+
+    mediaResposta = sum(p['response'] for p in processos) / quantidade
+
+    mediaEspera = sum(p['wait'] for p in processos) / quantidade
+
+    return mediaRetorno, mediaResposta, mediaEspera
 
 
 

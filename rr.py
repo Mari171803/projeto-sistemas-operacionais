@@ -1,15 +1,33 @@
 def round_robin(processes, quantum):
-    for p in processes:
+
+    inputArray = [] #criar um array separado de processes pode ser desnecessário mas pelo menos vc trouxe o bode né? o premiado la
+    inputArray = processes.sort(key=lambda p: p ['arrival'])
+
+    for p in inputArray:
         p['remaining'] = p['burst']
         p['start'] = None
-    queue = processes.copy()
+
+    queue = []
     current_time = 0
     completed = []
 
-    while queue:
-        current = queue.pop(0)
+    while inputArray or queue:
+
+        if not queue: #avança o relogio até a proxima chegada se não tiverm processos disponiveis
+            current_time = max(
+                current_time,
+                inputArray[0]['arrival']
+            )
+
+        while inputArray and inputArray[0]['arrival'] <= current_time: #adiciona os processos q ja chegaram
+            queue.append(inputArray.pop(0))
+
+        current = queue.pop(0) #seleciona o próximo processo
+
         if current['start'] is None:
             current['start'] = current_time  # Primeira vez que executa
+
+            current['response'] = current['start'] - current['arrival']
 
         if current['remaining'] > quantum:
             current_time += quantum
@@ -29,7 +47,7 @@ def print_results(processes):
     total_turnaround = 0
 
     print("\n{:^7} {:^10} {:^12} {:^10} {:^10} {:^10} {:^10}".format(
-        "PID", "Chegada", "Execução", "Prioridade", "Término", "Espera", "Retorno"
+        "PID", "Chegada", "Execução", "Response", "Término", "Espera", "Retorno"
     ))
     print("-" * 70)
 
@@ -38,7 +56,7 @@ def print_results(processes):
             p['pid'],
             p['arrival'],
             p['burst'],
-            "-",  # Prioridade não se aplica ao RR
+            p['response'],  # NABO PRA TODO MUNDO!!! PEGUE JA SEU NABO!!
             p['finish'],
             p['wait'],
             p['turnaround']
