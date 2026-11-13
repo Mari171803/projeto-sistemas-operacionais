@@ -1,12 +1,36 @@
-import fcfs
+from fcfs import *
+from rr import *
 import rr
-import sjf
+from sjf import *
+
+import sys
+from pathlib import Path
 
 
-# Leitura do arquivo .txt, retirando espaços em branco e "\n", além de converter de string para inteiro
-linhas = [] 
-with open('arquivo-processos.txt', encoding= "utf-8") as l:
-    linhas = [int(valor) for valor in l.read().split()] 
+# Leitura do arquivo .txt para retirada das informações dos processos
+    ## o arquivo resultado.txt é ignorado e as seguintes revisões são feitas: 
+        ### se não existe um arquivo de entrada dos dados, se existe mais de um arquivo de entrada
+        ### se os valores no arquivo são inteiros, se existe quantidades incorretas de entradas
+pasta = Path(__file__).resolve().parent
+arquivos_entrada = [
+    arquivo for arquivo in pasta.glob("*.txt")
+    if arquivo.is_file() and arquivo.name.casefold() != "resultado.txt"
+]
+
+if not arquivos_entrada:
+    raise FileNotFoundError(f"Nenhum arquivo .txt de entrada encontrado na pasta: {pasta}")
+if len(arquivos_entrada) > 1:
+    nomes = ", ".join(sorted(arquivo.name for arquivo in arquivos_entrada))
+    raise ValueError(f"Há mais de um arquivo .txt de entrada na pasta: {nomes}. Insira um de cada vez.")
+
+arquivo_entrada = arquivos_entrada[0]
+try:
+    linhas = [int(valor) for valor in arquivo_entrada.read_text(encoding="utf-8").split()]
+except ValueError as erro:
+    raise ValueError(f"O arquivo {arquivo_entrada.name} deve conter apenas valores inteiros.") from erro
+
+if not linhas or len(linhas) % 2 != 0:
+    raise ValueError("Valores incorretos. O programa exige 2 valores: o tempo de chegada e tempo de duração de cada processo. Insira-os corretamente.")
 
 
 
@@ -65,3 +89,12 @@ for i in range(len(processos)):
 rr.result = rr.round_robin(rr.processes, quantum=2)
 rr.print_results(rr.result)
 print("----------------")
+
+paragrafos = []
+
+
+
+# Criação do arquivo "resultado.txt" com os resultados das médias conforme pedido na especificação do projeto
+with open("resultado.txt", "w", encoding= "utf-8") as p:
+    for i in range(len(paragrafos)):
+        p.writelines(f"{paragrafos[i]}")
