@@ -1,14 +1,14 @@
 def sjf(processes):
-    processes.sort(key=lambda x: x['arrival'])
+    processes.sort(key=lambda x: x['arrival']) #organização por ordem de chegada
     current_time = 0
     completed = []
     ready_queue = []
     
-    while processes or ready_queue:
-        while processes and processes[0]['arrival'] <= current_time:
+    while processes or ready_queue: #loop principal, funciona enquanto tiverem processos que n chegaram ou aguardando execução
+        while processes and processes[0]['arrival'] <= current_time: #inserção de projetos na fila de prontos
             ready_queue.append(processes.pop(0))
         
-        if ready_queue:
+        if ready_queue: #seleção e tratamento do menor processo
             ready_queue.sort(key=lambda x: x['burst'])
             current = ready_queue.pop(0)
             current['start'] = current_time
@@ -17,12 +17,13 @@ def sjf(processes):
             current['turnaround'] = current['finish'] - current['arrival']
             current_time = current['finish']
             completed.append(current)
-        else:
-            current_time += 1
+        else: #tratamento do caso CPU desocupada
+            current_time = processes[0]['arrival'] #na teoria pula pra o começo do proximo processo, isso deixa o código mais eficiente porém menos fidedigno, fica ou n fica?
+            #current_time += 1 #vc viu se ela tava com um bode? um bem branquinho... bonitinho... :)
     
     return completed
 
-def print_results(processes):
+def print_results(processes): #função para colher dados e identificar erros, não usada na criação do resultado final
     total_wait = 0
     total_turnaround = 0
 

@@ -21,7 +21,7 @@ def print_results(processes): #função para para printar resultados de testes, 
     total_turnaround = 0
 
     print("\n{:^7} {:^10} {:^12} {:^10} {:^10} {:^10} {:^10} {:^10}".format(
-        "PID", "Chegada", "Execução", "Prioridade", "Início", "Término", "Espera", "Retorno"
+        "PID", "Chegada", "Execução", "Resposta", "Início", "Término", "Espera", "Retorno"
     ))
     print("-" * 80)
 
