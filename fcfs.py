@@ -3,7 +3,7 @@ def fcfs(processes):
     processes.sort(key=lambda x: x['arrival'])
 
     current_time = 0
-    for p in processes:
+    for p in processes: #tratamento de cada processo
         if current_time < p['arrival']:
             current_time = p['arrival']
 
@@ -16,7 +16,7 @@ def fcfs(processes):
 
     return processes
 
-def print_results(processes):
+def print_results(processes): #função para para printar resultados de testes, não usada na criação do arquivo resposta
     total_wait = 0
     total_turnaround = 0
 
@@ -30,7 +30,7 @@ def print_results(processes):
             p['pid'],
             p['arrival'],
             p['burst'],
-            p['response'],  # Prioridade não se aplica ao FCFS
+            p['response'],  # e o mel? eu acho q ta acabando ein... # mesmo o algoritimo n usando prioridade, vale a pena mostrar tudo 
             p['start'],
             p['finish'],
             p['wait'],
