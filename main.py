@@ -34,6 +34,19 @@ if not linhas or len(linhas) % 2 != 0:
 
 
 
+def calcularMedias(processos): # função pra calcular as médias
+    quantidade = len(processos)
+
+    mediaRetorno = sum(p['turnaround'] for p in processos) / quantidade
+
+    mediaResposta = sum(p['response'] for p in processos) / quantidade
+
+    mediaEspera = sum(p['wait'] for p in processos) / quantidade
+
+    return mediaRetorno, mediaResposta, mediaEspera
+
+
+
 # Loop que cria uma matriz contendo, em ordem, o id dos processos, o tempo de chegada e a duração dos processos
 processos = []
 quantia_processos = int((len(linhas) / 2))
