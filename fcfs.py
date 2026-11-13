@@ -8,6 +8,7 @@ def fcfs(processes):
             current_time = p['arrival']
 
         p['start'] = current_time
+        p['response'] = p['start'] - p['arrival'] # O mel ta acabando!
         p['finish'] = current_time + p['burst']
         p['wait'] = current_time - p['arrival']
         p['turnaround'] = p['finish'] - p['arrival']
@@ -29,7 +30,7 @@ def print_results(processes):
             p['pid'],
             p['arrival'],
             p['burst'],
-            "-",  # Prioridade não se aplica ao FCFS
+            p['response'],  # Prioridade não se aplica ao FCFS
             p['start'],
             p['finish'],
             p['wait'],
