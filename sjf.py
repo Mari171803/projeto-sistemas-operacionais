@@ -1,5 +1,6 @@
 def sjf(processes):
     processes.sort(key=lambda x: x['arrival']) #organização por ordem de chegada
+
     current_time = 0
     completed = []
     ready_queue = []
@@ -9,9 +10,13 @@ def sjf(processes):
             ready_queue.append(processes.pop(0))
         
         if ready_queue: #seleção e tratamento do menor processo
+
             ready_queue.sort(key=lambda x: x['burst'])
             current = ready_queue.pop(0)
+
             current['start'] = current_time
+
+            current['response'] = current['start'] - current['arrival']
             current['finish'] = current_time + current['burst']
             current['wait'] = current_time - current['arrival']
             current['turnaround'] = current['finish'] - current['arrival']
