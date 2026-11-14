@@ -1,10 +1,8 @@
 def round_robin(processes, quantum):
 
-    # inputArray = [] #criar um array separado de processes pode ser desnecessário mas pelo menos vc trouxe o bode né? o premiado la
-    # inputArray = processes.sort(key=lambda p: p ['arrival'])
-    inputArray = sorted(processes, key=lambda p: p['arrival'])
+    processes.sort(key=lambda p: p ['arrival'])
 
-    for p in inputArray:
+    for p in processes:
         p['remaining'] = p['burst']
         p['start'] = None
 
@@ -12,16 +10,16 @@ def round_robin(processes, quantum):
     current_time = 0
     completed = []
 
-    while inputArray or queue:
+    while processes or queue:
 
         if not queue: #avança o relogio até a proxima chegada se não tiverm processos disponiveis
             current_time = max(
                 current_time,
-                inputArray[0]['arrival']
+                processes[0]['arrival']
             )
 
-        while inputArray and inputArray[0]['arrival'] <= current_time: #adiciona os processos q ja chegaram
-            queue.append(inputArray.pop(0))
+        while processes and processes[0]['arrival'] <= current_time: #adiciona os processos q ja chegaram
+            queue.append(processes.pop(0))
 
         current = queue.pop(0) #seleciona o próximo processo
 
@@ -30,16 +28,24 @@ def round_robin(processes, quantum):
 
             current['response'] = current['start'] - current['arrival']
 
-        if current['remaining'] > quantum:
-            current_time += quantum
-            current['remaining'] -= quantum
-            queue.append(current)
-        else:
-            current_time += current['remaining']
-            current['finish'] = current_time
-            current['turnaround'] = current_time - current['arrival']
+        executionTime = min(quantum, current['remaining']) #executa por um quantum ou pelo q falta pra o processo acabar, o q for menor
+
+        current_time += executionTime
+        current['remaining'] -= executionTime
+
+        while processes and processes[0]['arrival'] <= current_time: #adiciona os que chegam durante a execução, eu sei q ta repetido, é assim mesmo
+            queue.append(processes.pop(0))
+
+        if current['remaining'] == 0:
+            current['finish'] = current_time 
+
+            current['turnaround'] = current['finish'] - current['arrival']
+            
             current['wait'] = current['turnaround'] - current['burst']
+
             completed.append(current)
+        else:
+            queue.append(current) #não terminou volta pra fila querido
 
     return completed
 
