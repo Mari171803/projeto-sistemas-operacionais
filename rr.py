@@ -1,7 +1,8 @@
 def round_robin(processes, quantum):
 
-    inputArray = [] #criar um array separado de processes pode ser desnecessário mas pelo menos vc trouxe o bode né? o premiado la
-    inputArray = processes.sort(key=lambda p: p ['arrival'])
+    # inputArray = [] #criar um array separado de processes pode ser desnecessário mas pelo menos vc trouxe o bode né? o premiado la
+    # inputArray = processes.sort(key=lambda p: p ['arrival'])
+    inputArray = sorted(processes, key=lambda p: p['arrival'])
 
     for p in inputArray:
         p['remaining'] = p['burst']
@@ -45,6 +46,7 @@ def round_robin(processes, quantum):
 def print_results(processes):
     total_wait = 0
     total_turnaround = 0
+    resposta = 0
 
     print("\n{:^7} {:^10} {:^12} {:^10} {:^10} {:^10} {:^10}".format(
         "PID", "Chegada", "Execução", "Response", "Término", "Espera", "Retorno"
@@ -63,9 +65,11 @@ def print_results(processes):
         ))
         total_wait += p['wait']
         total_turnaround += p['turnaround']
-
-    print("\nMédia Espera: {:.2f}".format(total_wait / len(processes)))
-    print("Média Retorno: {:.2f}".format(total_turnaround / len(processes)))
+        resposta += p['response']
+        
+    print("\nMédia Retorno: {:.2f}".format(resposta / len(processes)))
+    print("Média Resposta: {:.2f}".format(total_wait / len(processes)))
+    print("Média Espera: {:.2f}".format(total_wait / len(processes)))
 
 # Exemplo de uso
 if __name__ == "__main__":

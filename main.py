@@ -1,16 +1,10 @@
-from fcfs import *
-from rr import *
-from fcfs import *
-from rr import *
+import fcfs
+import sjf
 import rr
-from sjf import *
 
 import sys
 from pathlib import Path
-from sjf import *
 
-import sys
-from pathlib import Path
 
 
 # Leitura do arquivo .txt para retirada das informações dos processos
@@ -40,19 +34,6 @@ if not linhas or len(linhas) % 2 != 0:
 
 
 
-def calcularMedias(processos): # função pra calcular as médias
-    quantidade = len(processos)
-
-    mediaRetorno = sum(p['turnaround'] for p in processos) / quantidade
-
-    mediaResposta = sum(p['response'] for p in processos) / quantidade
-
-    mediaEspera = sum(p['wait'] for p in processos) / quantidade
-
-    return mediaRetorno, mediaResposta, mediaEspera
-
-
-
 # Loop que cria uma matriz contendo, em ordem, o id dos processos, o tempo de chegada e a duração dos processos
 processos = []
 quantia_processos = int((len(linhas) / 2))
@@ -67,7 +48,7 @@ for i in range(quantia_processos):
         c += 1
 
     processos.append(linha_processos)
-    
+
 
 
 # Chamada das funções passando a matriz processos como atribuição em um for
@@ -109,7 +90,23 @@ rr.result = rr.round_robin(rr.processes, quantum=2)
 rr.print_results(rr.result)
 print("----------------")
 
-paragrafos = []
+paragrafos = [
+    {'FCFS',},
+    {'SJF', },
+    {'RR', }
+]
+
+
+
+# Função pra calcular as médias
+def calcularMedias(processos): 
+    quantidade = len(processos)
+
+    mediaRetorno = sum(p['turnaround'] for p in processos) / quantidade
+    mediaResposta = sum(p['response'] for p in processos) / quantidade
+    mediaEspera = sum(p['wait'] for p in processos) / quantidade
+
+    return mediaRetorno, mediaResposta, mediaEspera
 
 
 
