@@ -31,6 +31,7 @@ def sjf(processes):
 def print_results(processes): #função para colher dados e identificar erros, não usada na criação do resultado final
     total_wait = 0
     total_turnaround = 0
+    resposta = 0
 
     print("\n{:^7} {:^10} {:^12} {:^10} {:^10} {:^10} {:^10} {:^10}".format(
         "PID", "Chegada", "Execução", "Prioridade", "Início", "Término", "Espera", "Retorno"
@@ -42,7 +43,7 @@ def print_results(processes): #função para colher dados e identificar erros, n
             p['pid'],
             p['arrival'],
             p['burst'],
-            "-",  # Prioridade não se aplica ao SJF
+            p['response'],
             p['start'],
             p['finish'],
             p['wait'],
@@ -50,9 +51,13 @@ def print_results(processes): #função para colher dados e identificar erros, n
         ))
         total_wait += p['wait']
         total_turnaround += p['turnaround']
+        resposta += p['response']
 
-    print("\nMédia Espera: {:.2f}".format(total_wait / len(processes)))
-    print("Média Retorno: {:.2f}".format(total_turnaround / len(processes)))
+    print("\nMédia Retorno: {:.2f}".format(total_turnaround / len(processes)))
+    print("Média Resposta: {:.2f}".format(resposta / len(processes)))
+    print("Média Espera: {:.2f}".format(total_wait / len(processes)))
+    
+    
 
 # Exemplo de uso
 if __name__ == "__main__":
